@@ -3,60 +3,68 @@
 
 #include <opencv2/highgui/highgui.hpp>
 #include <string>
+#include <map>
 
 class Config {
 public:
     Config();
-    void saveConfig();
-    void loadConfig();
+    void saveConfig(std::string fileN);
+    void loadConfig(std::string fileN);
 
-    int getDigitMaxHeight() const {
-        return _digitMaxHeight;
-    }
 
     int getDigitMinHeight() const {
         return _digitMinHeight;
     }
 
-    int getDigitYAlignment() const {
-        return _digitYAlignment;
+    int getDigitMaxHeight() const {
+        return _digitMaxHeight;
+    }
+
+    int getCaptureBoardFPS() const {
+        return _captureBoardFPS;
     }
 
     std::string getTrainingDataFilename() const {
         return _trainingDataFilename;
     }
 
-    float getOcrMaxDist() const {
-        return _ocrMaxDist;
+    float getOcrThreshold() const {
+        return _ocrThreshold;
     }
 
     int getRotationDegrees() const {
         return _rotationDegrees;
     }
 
-    int getCannyThreshold1() const {
-        return _cannyThreshold1;
+    cv::Scalar getBGcolor() {return _bgColor;}
+    void setBGcolor(cv::Scalar rgb) {_bgColor = rgb;}
+
+    cv::Scalar getCHARcolor() {return _charColor;}
+    void setCHARcolor(cv::Scalar rgb) {_charColor = rgb;}
+
+    int getRoiID(std::string name) {
+    	if(roiID.find(name)==roiID.end()) return -1;
+        return roiID[name];
     }
 
-    int getCannyThreshold2() const {
-        return _cannyThreshold2;
+    std::vector<std::string> GetRoiNames() const{
+        return roiNames;
     }
 
-    int getBinaryThreshold() const {
-    	return _binaryThreshold;
-    }
-
+    std::vector<cv::Rect> getRoiBoxes() {return _roiBox;}
+    void setRoiBoxes(std::vector<cv::Rect> roiBox) {_roiBox = roiBox;}
 
 private:
     int _rotationDegrees;
-    float _ocrMaxDist;
+    float _ocrThreshold;
     int _digitMinHeight;
     int _digitMaxHeight;
-    int _digitYAlignment;
-    int _cannyThreshold1;
-    int _cannyThreshold2;
-    int _binaryThreshold;
+    int _captureBoardFPS;
     std::string _trainingDataFilename;
+    cv::Scalar _bgColor, _charColor;
+    std::vector<cv::Rect> _roiBox;
+    std::map<std::string, int> roiID;
+    std::vector<std::string> roiNames;
 };
 
 #endif /* INCLUDE_OCR_CONFIG_HH_ */
