@@ -10,14 +10,15 @@
 
 class KNearestOcr {
 public:
-	KNearestOcr(const Config& config);
+	KNearestOcr();
 	virtual ~KNearestOcr();
 
 	int learn(const cv::Mat& img);
 	int learn(const std::vector<cv::Mat>& images);
 	bool hasTrainingData();
-	void saveTrainingData();
-	bool loadTrainingData();
+	void saveTrainingData(std::string fileN);
+    void printTrainingStatus();
+	bool loadTrainingData(std::string fileN);
 
 	char recognize(const cv::Mat& img);
 	std::string recognize(const std::vector<cv::Mat>& images);
@@ -29,7 +30,15 @@ private:
 	cv::Mat samples;
 	cv::Mat responses;
 	cv::Ptr<cv::ml::KNearest> pModel;
-	Config config;
+	
+    //specific training
+public:
+    void RecogAndLearn(const std::vector<cv::Mat> &digits);
+    void SetOcrThreshold(int n) {ocrThreshold = n;}
+private:
+    int ocrThreshold;
+
+
 };
 
 #endif /* INCLUDE_OCR_KNN_HH_ */
